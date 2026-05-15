@@ -28,7 +28,37 @@ both Claude Code and Codex.
 | `.claude-plugin/marketplace.json`             | Claude Code marketplace manifest. |
 | `.agents/plugins/marketplace.json`            | Codex marketplace manifest. |
 | `scripts/validate_plugin.py`                  | Local + CI validation. |
+| `justfile`                                    | Common developer tasks (`just --list`). |
 | `plan/`                                       | In-flight design docs. |
+
+## Prerequisites
+
+| Tool                          | Why                                                    | Install |
+| ----------------------------- | ------------------------------------------------------ | ------- |
+| `python3`                     | Run the validator.                                     | preinstalled on macOS / `brew install python` |
+| [`just`](https://just.systems) | Task runner (`justfile`).                              | `brew install just` |
+| `node` + `npx`                | Run MCP Inspector via `npx`.                           | `brew install node` |
+| `claude` CLI (optional)       | Local Claude Code testing + `claude plugin validate`.  | See Claude Code docs |
+| `codex` CLI (optional)        | Local Codex marketplace testing.                       | See Codex docs |
+
+## Common tasks (justfile)
+
+The `justfile` wraps everything below. Run `just` (no args) to list
+recipes. Highlights:
+
+| Recipe                       | What it does |
+| ---------------------------- | ------------ |
+| `just validate`              | Run the Python plugin validator. |
+| `just validate-claude`       | Run `claude plugin validate .` (requires Claude CLI). |
+| `just check`                 | Run all validators in sequence. |
+| `just claude-local`          | Launch Claude Code against `./plugins/ally`. |
+| `just codex-local`           | Add this repo as a local Codex marketplace. |
+| `just codex-sandbox`         | Same as `codex-local`, isolated in a throwaway `CODEX_HOME`. |
+| `just inspect [url]`         | Launch MCP Inspector (defaults to staging). |
+| `just inspect-staging`       | Inspector against staging Ally MCP. |
+| `just inspect-prod`          | Inspector against prod Ally MCP. |
+| `just inspect-local`         | Inspector against `http://localhost:8000/mcp/`. |
+| `just envs`                  | Print the URL each environment maps to. |
 
 ## MCP server
 
@@ -153,6 +183,74 @@ marketplace directly:
 claude plugin validate .
 ```
 
+## Inspecting the MCP server with MCP Inspector
+
+[MCP Inspector](https://github.com/modelcontextprotocol/inspector) is the
+official debugging tool for Model Context Protocol servers. Use it to
+verify that the Ally MCP endpoint actually responds, see which tools and
+resources are exposed, and call tools by hand before shipping any plugin
+or skill change that depends on them.
+
+### Quick start
+
+```bash
+just inspect           # staging (default)
+just inspect-prod      # production
+just inspect-local     # http://localhost:8000/mcp/ (run the Ally MCP server locally first)
+```
+
+Or pass any URL explicitly:
+
+```bash
+just inspect "https://api.staging.ally.security/mcp"
+```
+
+Under the hood each recipe just runs:
+
+```bash
+npx --yes @modelcontextprotocol/inspector
+```
+
+### Using the UI
+
+1. The recipe prints the **Server URL** and **Transport** to use, then
+   spawns `npx @modelcontextprotocol/inspector`. The inspector opens a
+   browser tab (typically at `http://localhost:6274`).
+2. In the **Transport** dropdown pick **Streamable HTTP**.
+3. Paste the printed Server URL into the **Server URL** field.
+4. Click **Connect**. You'll be prompted to authenticate with Ally on
+   first connect (the inspector handles the OAuth/token flow inline).
+5. Once connected, browse:
+   - **Tools** — call `whoami`, `list_organizations`, `list_tabletops`,
+     `get_tabletop`, `list_auditlogs`, `list_knowledgebase`, etc. and
+     inspect the raw JSON responses.
+   - **Resources** — confirm any resources the server advertises.
+   - **Prompts** — confirm any prompt templates exposed by the server.
+6. Use the **History** pane to replay calls while iterating on a skill.
+
+### When to run it
+
+- Before bumping the MCP URL in `.mcp.json` / `.codex-mcp.json`.
+- After any backend change that touches tool names, parameters, or
+  return shapes — confirm the skills under `plugins/ally/skills/`
+  reference accurate tool names and field paths.
+- When debugging a failing tool call from inside Claude Code or Codex,
+  to isolate "is the server broken?" from "is the plugin/skill wiring
+  broken?".
+
+### Inspector against a local Ally MCP server
+
+If you're developing the Ally MCP server locally:
+
+```bash
+just inspect-local
+```
+
+This points the inspector at `http://localhost:8000/mcp/`, matching the
+URL the proposed `local` environment branch will ship (see
+[`plan/environment-branches.md`](plan/environment-branches.md)). Start
+the local Ally MCP server in another terminal first.
+
 ## Distribution / multi-environment
 
 Distribution is git-native: users install via
@@ -165,7 +263,11 @@ repo is documented in
 
 ## Pull requests
 
-- Run `python3 scripts/validate_plugin.py` before opening a PR.
+- Run `just check` (or `python3 scripts/validate_plugin.py`) before
+  opening a PR.
+- If your change touches MCP wiring, run `just inspect` against staging
+  to confirm the server still responds with the tools/resources your
+  skill expects.
 - Don't commit symlinks under `plugins/ally/` — the validator rejects
   them.
 - Keep skill frontmatter and required asset paths in sync with the

@@ -1,6 +1,6 @@
 {
   "name": "ally",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Ally Security tabletop exercise workflows, quest scenario design, and MCP-backed incident response tools.",
   "author": {
     "name": "Ally Security",
@@ -26,6 +26,5 @@
     "mitre-attack"
   ],
   "skills": "./skills/",
-  "hooks": "./hooks/hooks.json",
   "mcpServers": "./.mcp.json"
 }
