@@ -1,0 +1,51 @@
+{
+  "name": "ally",
+  "version": "0.1.0",
+  "description": "Ally Security tabletop exercise workflows, quest scenario design, and MCP-backed incident response tools.",
+  "author": {
+    "name": "Ally Security",
+    "email": "support@ally.security",
+    "url": "https://ally.security"
+  },
+  "homepage": "https://ally.security",
+  "documentation": "https://docs.ally.security",
+  "support": "https://ally.security/contact",
+  "repository": "https://github.com/ally-security/ally-plugin",
+  "bugs": "https://github.com/ally-security/ally-plugin/issues",
+  "license": "MIT",
+  "keywords": [
+    "ally",
+    "security",
+    "mcp",
+    "tabletop",
+    "incident-response",
+    "quest",
+    "scenario-design",
+    "cyber-crisis",
+    "facilitation",
+    "mitre-attack"
+  ],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.codex-mcp.json",
+  "interface": {
+    "displayName": "Ally",
+    "shortDescription": "Plan, inspect, and improve Ally tabletop exercises.",
+    "longDescription": "Connect Codex to Ally Security tools and bundled skills for tabletop exercise reporting, quest scenario design, facilitator preparation, and incident-response workflow analysis.",
+    "developerName": "Ally Security",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "websiteURL": "https://ally.security",
+    "privacyPolicyURL": "https://app.termly.io/policy-viewer/policy.html?policyUUID=af48f919-2bcd-4534-aa88-a7f61a065fe3",
+    "termsOfServiceURL": "https://app.termly.io/policy-viewer/policy.html?policyUUID=16d27ab5-bb25-4127-b5bf-108da1a0522e",
+    "defaultPrompt": [
+      "List my Ally organizations and available tabletops",
+      "Summarize a tabletop and extract follow-up actions",
+      "Review an Ally quest scenario for realism"
+    ],
+    "brandColor": "#CF2063",
+    "composerIcon": "./assets/favicon.png",
+    "logo": "./assets/logo.png",
+    "screenshots": []
+  }
+}

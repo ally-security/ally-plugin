@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    name: Validate plugin manifests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate JSON manifests
+        run: python3 scripts/validate_plugin.py
+
+  codex-marketplace-smoke:
+    name: Codex marketplace smoke test
+    runs-on: ubuntu-latest
+    needs: validate
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Codex CLI
+        run: npm install --global @openai/codex@latest
+
+      - name: Show Codex CLI version
+        run: codex --version
+
+      - name: Add local marketplace in isolated Codex home
+        env:
+          CODEX_HOME: ${{ runner.temp }}/codex-plugin-test-home
+        run: |
+          mkdir -p "$CODEX_HOME"
+          codex plugin marketplace add ./
+
+  claude-marketplace-smoke:
+    name: Claude marketplace smoke test
+    runs-on: ubuntu-latest
+    needs: validate
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Claude Code CLI
+        run: npm install --global @anthropic-ai/claude-code@latest
+
+      - name: Show Claude Code CLI version
+        run: claude --version
+
+      - name: Validate Claude marketplace
+        run: claude plugin validate .

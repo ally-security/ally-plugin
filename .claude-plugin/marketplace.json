@@ -1,0 +1,43 @@
+{
+  "name": "ally-marketplace",
+  "owner": {
+    "name": "Ally Security",
+    "email": "support@ally.security"
+  },
+  "description": "Ally Security plugins for tabletop exercises, quest scenarios, and incident-response workflows.",
+  "version": "0.1.0",
+  "homepage": "https://ally.security",
+  "repository": "https://github.com/ally-security/ally-plugin",
+  "license": "MIT",
+  "keywords": ["ally", "security", "mcp", "tabletop", "incident-response"],
+  "plugins": [
+    {
+      "name": "ally",
+      "source": "./plugins/ally",
+      "description": "Plan, inspect, and improve Ally tabletop exercises and quest scenarios.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Ally Security",
+        "email": "support@ally.security",
+        "url": "https://ally.security"
+      },
+      "homepage": "https://ally.security",
+      "repository": "https://github.com/ally-security/ally-plugin",
+      "license": "MIT",
+      "category": "Productivity",
+      "tags": ["ally", "mcp", "security", "tabletop", "incident-response", "quest", "mitre-attack"],
+      "keywords": [
+        "ally",
+        "security",
+        "mcp",
+        "tabletop",
+        "incident-response",
+        "quest",
+        "scenario-design",
+        "cyber-crisis",
+        "facilitation",
+        "mitre-attack"
+      ]
+    }
+  ]
+}

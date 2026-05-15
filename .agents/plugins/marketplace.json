@@ -1,0 +1,26 @@
+{
+  "name": "ally-marketplace",
+  "interface": {
+    "displayName": "Ally Plugins",
+    "description": "Ally Security plugins for tabletop exercises, quest scenarios, and incident-response workflows.",
+    "websiteURL": "https://ally.security",
+    "publisher": "Ally Security"
+  },
+  "plugins": [
+    {
+      "name": "ally",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ally"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "description": "Plan, inspect, and improve Ally tabletop exercises and quest scenarios.",
+      "version": "0.1.0",
+      "tags": ["ally", "security", "mcp", "tabletop", "incident-response", "quest"]
+    }
+  ]
+}

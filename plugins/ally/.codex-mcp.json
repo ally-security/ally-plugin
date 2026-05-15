@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "mcp-ally": {
+      "url": "http://localhost:8000/mcp/"
+    }
+  }
+}

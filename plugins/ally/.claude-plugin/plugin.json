@@ -1,0 +1,31 @@
+{
+  "name": "ally",
+  "version": "0.1.0",
+  "description": "Ally Security tabletop exercise workflows, quest scenario design, and MCP-backed incident response tools.",
+  "author": {
+    "name": "Ally Security",
+    "email": "support@ally.security",
+    "url": "https://ally.security"
+  },
+  "homepage": "https://ally.security",
+  "documentation": "https://docs.ally.security",
+  "support": "https://ally.security/contact",
+  "repository": "https://github.com/ally-security/ally-plugin",
+  "bugs": "https://github.com/ally-security/ally-plugin/issues",
+  "license": "MIT",
+  "keywords": [
+    "ally",
+    "security",
+    "mcp",
+    "tabletop",
+    "incident-response",
+    "quest",
+    "scenario-design",
+    "cyber-crisis",
+    "facilitation",
+    "mitre-attack"
+  ],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json"
+}
