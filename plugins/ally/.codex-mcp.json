@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "mcp-ally": {
-      "url": "http://localhost:8000/mcp/"
+      "url": "https://api.staging.ally.security/mcp"
     }
   }
 }

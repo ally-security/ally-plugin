@@ -6,10 +6,6 @@
   },
   "description": "Ally Security plugins for tabletop exercises, quest scenarios, and incident-response workflows.",
   "version": "0.1.0",
-  "homepage": "https://ally.security",
-  "repository": "https://github.com/ally-security/ally-plugin",
-  "license": "MIT",
-  "keywords": ["ally", "security", "mcp", "tabletop", "incident-response"],
   "plugins": [
     {
       "name": "ally",

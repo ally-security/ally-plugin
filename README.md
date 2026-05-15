@@ -21,10 +21,10 @@ lives once under `plugins/ally/` and is used by both Claude Code and Codex.
 
 ## MCP Server
 
-The scaffold points at a local Streamable HTTP MCP server:
+The plugin points at the Ally staging Streamable HTTP MCP server:
 
 ```text
-http://localhost:8000/mcp/
+https://api.staging.ally.security/mcp
 ```
 
 Update `plugins/ally/.mcp.json` and `plugins/ally/.codex-mcp.json` when
