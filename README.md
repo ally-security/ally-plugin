@@ -51,7 +51,7 @@ Add the marketplace and install the `ally` plugin:
 ```
 
 ```
-claude plugin marketplace add ally-security/ally-plugin
+claude plugin marketplace add ally-security/ally-plugin && claude plugin list && claude plugin install ally@ally-marketplace
 ```
 
 Then restart Claude Code. You'll be prompted to authenticate with Ally on
