@@ -1,106 +1,103 @@
 # Ally Plugins
 
-Marketplace package for exposing Ally tooling to Claude Code and Codex.
+> [!WARNING]
+> **Experimental — work in progress.**
+> This marketplace is under active development. Endpoints, skills, and the
+> multi-environment install flow are subject to change without notice. Do
+> not rely on it for production workflows yet.
 
-This repository is structured as a marketplace repo. The actual plugin package
-lives once under `plugins/ally/` and is used by both Claude Code and Codex.
+Bring Ally Security workflows — tabletop exercises, quest scenario design,
+and incident-response analysis — straight into your AI coding agent.
 
-## Layout
+This repository is a marketplace that ships one plugin, `ally`, for both
+**Claude Code** and **Codex**. Installing it gives your agent:
 
-- `plugins/ally/` - the canonical Ally plugin package.
-- `plugins/ally/.claude-plugin/plugin.json` - Claude Code plugin manifest.
-- `plugins/ally/.codex-plugin/plugin.json` - Codex plugin manifest.
-- `plugins/ally/.mcp.json` - Claude Code MCP server configuration.
-- `plugins/ally/.codex-mcp.json` - Codex plugin MCP server configuration.
-- `plugins/ally/skills/` - reusable agent skills shipped with the plugin.
-- `plugins/ally/hooks/` - optional lifecycle hooks and hook configuration.
-- `plugins/ally/assets/` - logos, favicons, screenshots, and other plugin assets.
-- `.claude-plugin/marketplace.json` - Claude Code marketplace manifest.
-- `.agents/plugins/marketplace.json` - Codex marketplace manifest.
-- `scripts/validate_plugin.py` - local and CI validation.
+- A connection to the Ally MCP server (read access to your organizations,
+  tabletops, audit logs, and knowledge base).
+- A set of bundled **skills** that teach the agent how to plan, review,
+  and report on Ally exercises.
 
-## MCP Server
+---
 
-The plugin points at the Ally staging Streamable HTTP MCP server:
+## What you get
 
-```text
-https://api.staging.ally.security/mcp
-```
+| Skill                                                     | What it does |
+| --------------------------------------------------------- | ------------ |
+| [`tabletop`](plugins/ally/skills/tabletop/SKILL.md)       | Plan, prepare, review, and report on Ally tabletop exercises. Summarize sessions, extract follow-up actions, and audit completed exercises. |
+| [`quest-scenario`](plugins/ally/skills/quest-scenario/SKILL.md) | Design and inspect quest-style incident scenarios — arcs, injects, roles, decision polls, media, and facilitator notes. |
 
-Update `plugins/ally/.mcp.json` and `plugins/ally/.codex-mcp.json` when
-the production Ally endpoint is ready. The transport field names differ by
-host, so keep the provider-specific shapes.
+Both skills are MCP-aware: when you're signed in, the agent can call into
+Ally directly to fetch organizations, tabletops, quests, and supporting
+context.
 
-## Skills
+### Example prompts to try
 
-- `plugins/ally/skills/tabletop/` - tabletop exercise planning and facilitation.
-- `plugins/ally/skills/quest-scenario/` - quest-style incident scenario design.
+- *"List my Ally organizations and available tabletops."*
+- *"Summarize the most recent tabletop and extract follow-up actions."*
+- *"Review this quest scenario for realism and flag any weak injects."*
+- *"Build a tabletop facilitator brief for next week's exercise."*
 
-Each skill includes:
+---
 
-- `SKILL.md` - the provider-readable skill entrypoint.
-- `files/` - supporting reference files.
-- `scripts/` - skill-specific helper scripts.
-
-## Local Install
+## Install
 
 ### Claude Code
 
-For local plugin-package testing, run Claude Code with the plugin directory:
-
-```bash
-claude --plugin-dir ./plugins/ally
-```
-
-For marketplace testing, add this repository and install `ally` from the
-`ally-marketplace` catalog:
+Add the marketplace and install the `ally` plugin:
 
 ```text
-/plugin marketplace add ./path/to/ally-plugin
+/plugin marketplace add ally-security/ally-plugin
 /plugin install ally@ally-marketplace
 ```
 
+Then restart Claude Code. You'll be prompted to authenticate with Ally on
+first use.
+
 ### Codex
 
-For local testing, add this repository as a Codex marketplace:
+Add the marketplace from GitHub:
 
 ```bash
-codex plugin marketplace add ./
+codex plugin marketplace add https://github.com/ally-security/ally-plugin
 ```
 
-Restart Codex and install `ally` from the `Ally Plugins`
-marketplace. Codex reads `.agents/plugins/marketplace.json`,
-`plugins/ally/.codex-plugin/plugin.json`,
-`plugins/ally/.codex-mcp.json`, `plugins/ally/skills/`, and
-`plugins/ally/hooks/hooks.json`.
+Restart Codex, open the **Ally Plugins** marketplace, and install
+**Ally**. You'll be prompted to authenticate with Ally on install.
 
-## Marketplace
+---
 
-- Claude Code marketplace metadata lives in `.claude-plugin/marketplace.json`.
-- Codex marketplace metadata lives in `.agents/plugins/marketplace.json`.
+## Authentication
 
-## Validation
+The plugin connects to Ally over MCP. You'll need an Ally account at
+[ally.security](https://ally.security). The first time the agent uses an
+Ally tool, it will walk you through sign-in.
 
-CI validates JSON manifests, referenced paths, Claude and Codex marketplace
-wiring, plugin metadata, required assets, MCP config shape, and skill
-frontmatter.
+---
 
-Run the same validation locally:
+## Environments
 
-```bash
-python3 scripts/validate_plugin.py
-```
+By default the plugin connects to Ally **staging**. Environment-specific
+install refs (`@prod`, `@local`) are coming soon — see
+[`plan/environment-branches.md`](plan/environment-branches.md) for the
+proposed model.
 
-You can also smoke-test that Codex accepts this repository as a local
-marketplace without changing your real Codex configuration:
+---
 
-```bash
-mkdir -p /private/tmp/codex-plugin-test-home
-env CODEX_HOME=/private/tmp/codex-plugin-test-home codex plugin marketplace add ./
-```
+## Support
 
-If Claude Code is installed, validate the Claude marketplace locally:
+- Website: [ally.security](https://ally.security)
+- Docs: [docs.ally.security](https://docs.ally.security)
+- Issues: [github.com/ally-security/ally-plugin/issues](https://github.com/ally-security/ally-plugin/issues)
+- Contact: [support@ally.security](mailto:support@ally.security)
 
-```bash
-claude plugin validate .
-```
+---
+
+## Contributing / Local Development
+
+Working on the plugin itself? See [`DEVELOPER.md`](DEVELOPER.md) for the
+repository layout, manifest format, MCP configuration, validation, and
+local-install instructions.
+
+## License
+
+MIT — see [`LICENSE`](LICENSE).
