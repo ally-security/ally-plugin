@@ -11,6 +11,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+EXPECTED_MCP_URL = "https://api.app.ally.security/mcp"
 
 JSON_FILES = [
     ".claude-plugin/marketplace.json",
@@ -25,12 +26,10 @@ JSON_FILES = [
 REQUIRED_PATHS = [
     "plugins/ally/.codex-plugin",
     "plugins/ally/.claude-plugin",
+    "plugins/ally/skills/ally/SKILL.md",
+    "plugins/ally/skills/ally/agents/openai.yaml",
+    "plugins/ally/skills/ally/references/tools.md",
     "plugins/ally/hooks",
-    "plugins/ally/skills",
-    "plugins/ally/skills/tabletop/files",
-    "plugins/ally/skills/tabletop/scripts",
-    "plugins/ally/skills/quest-scenario/files",
-    "plugins/ally/skills/quest-scenario/scripts",
     "scripts",
     "plugins/ally/assets",
     "plugins/ally/assets/icon.svg",
@@ -128,14 +127,16 @@ def validate_codex_manifest(plugin_path: Path) -> dict[str, Any]:
     return manifest
 
 
-def validate_claude_manifest(plugin_path: Path, plugin_name: str) -> None:
+def validate_claude_manifest(plugin_path: Path, plugin_name: str, plugin_version: str) -> None:
     manifest_path = plugin_path / ".claude-plugin" / "plugin.json"
     manifest = require_object(json.loads(manifest_path.read_text(encoding="utf-8")), str(manifest_path.relative_to(ROOT)))
 
     if manifest.get("name") != plugin_name:
         fail("Claude plugin manifest name must match the Codex plugin name")
 
-    require_string(manifest.get("version"), "Claude plugin version")
+    claude_version = require_string(manifest.get("version"), "Claude plugin version")
+    if claude_version != plugin_version:
+        fail("Claude plugin version must match the Codex plugin version")
     require_string(manifest.get("description"), "Claude plugin description")
     require_string(manifest.get("homepage"), "Claude plugin homepage")
     require_string(manifest.get("repository"), "Claude plugin repository")
@@ -145,7 +146,7 @@ def validate_claude_manifest(plugin_path: Path, plugin_name: str) -> None:
     require_string(author.get("name"), "Claude plugin author.name")
     require_string(author.get("url"), "Claude plugin author.url")
 
-    for key in ("skills", "hooks", "mcpServers"):
+    for key in ("skills", "mcpServers"):
         path = plugin_path / require_relative_path(manifest.get(key), f"Claude plugin {key}").relative_to(ROOT)
         if not path.exists():
             fail(f"Claude plugin {key} target does not exist: {manifest[key]}")
@@ -171,6 +172,10 @@ def validate_mcp_config(relative_path: str) -> None:
             require_string(config.get("command"), f"{relative_path}.mcpServers.{name}.command")
         else:
             fail(f"{relative_path}.mcpServers.{name} must define either url or command")
+
+    ally_config = require_object(servers.get("mcp-ally"), f"{relative_path}.mcpServers.mcp-ally")
+    if ally_config.get("url") != EXPECTED_MCP_URL:
+        fail(f"{relative_path} must point mcp-ally at {EXPECTED_MCP_URL}")
 
 
 def validate_codex_marketplace(plugin_name: str) -> Path:
@@ -214,6 +219,8 @@ def validate_codex_marketplace(plugin_name: str) -> Path:
     resolved_manifest = require_object(json.loads(plugin_manifest.read_text(encoding="utf-8")), str(plugin_manifest))
     if resolved_manifest.get("name") != plugin_name:
         fail(f"marketplace entry {plugin_name} does not match resolved plugin manifest name")
+    if entry.get("version") != resolved_manifest.get("version"):
+        fail(f"marketplace entry {plugin_name} version must match the plugin manifest")
 
     policy = require_object(entry.get("policy"), f"marketplace entry {plugin_name}.policy")
     if policy.get("installation") not in {"NOT_AVAILABLE", "AVAILABLE", "INSTALLED_BY_DEFAULT"}:
@@ -247,6 +254,12 @@ def validate_claude_marketplace(plugin_name: str, plugin_path: Path) -> None:
     if (ROOT / source[2:]).resolve() != plugin_path.resolve():
         fail(f"Claude marketplace source for {plugin_name} does not match Codex plugin path")
     require_string(matching[0].get("description"), f"Claude marketplace plugin {plugin_name}.description")
+    plugin_manifest = require_object(
+        json.loads((plugin_path / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")),
+        "Claude plugin manifest",
+    )
+    if matching[0].get("version") != plugin_manifest.get("version"):
+        fail(f"Claude marketplace plugin {plugin_name} version must match the plugin manifest")
     require_string(matching[0].get("category"), f"Claude marketplace plugin {plugin_name}.category")
     require_string_list(matching[0].get("tags"), f"Claude marketplace plugin {plugin_name}.tags", min_items=3)
 
@@ -272,6 +285,8 @@ def validate_skill(relative_path: str) -> None:
     for key in ("name", "description"):
         require_string(fields.get(key), f"{relative_path} frontmatter {key}")
 
+    if fields["name"] != "ally":
+        fail(f"{relative_path} frontmatter name must be ally")
     if not body.strip():
         fail(f"{relative_path} must contain skill instructions after frontmatter")
 
@@ -280,16 +295,6 @@ def validate_required_paths() -> None:
     for relative_path in REQUIRED_PATHS:
         if not (ROOT / relative_path).exists():
             fail(f"missing required path: {relative_path}")
-
-    duplicate_paths = [
-        "plugins/ally/skills/tabletop/files/files",
-        "plugins/ally/skills/tabletop/scripts/scripts",
-        "plugins/ally/skills/quest-scenario/files/files",
-        "plugins/ally/skills/quest-scenario/scripts/scripts",
-    ]
-    for relative_path in duplicate_paths:
-        if (ROOT / relative_path).exists():
-            fail(f"unexpected duplicate nested directory: {relative_path}")
 
 
 def main() -> int:
@@ -300,12 +305,11 @@ def main() -> int:
     plugin_path = ROOT / "plugins" / "ally"
     manifest = validate_codex_manifest(plugin_path)
     plugin_path = validate_codex_marketplace(manifest["name"])
-    validate_claude_manifest(plugin_path, manifest["name"])
+    validate_claude_manifest(plugin_path, manifest["name"], manifest["version"])
     validate_claude_marketplace(manifest["name"], plugin_path)
     validate_mcp_config("plugins/ally/.mcp.json")
     validate_mcp_config("plugins/ally/.codex-mcp.json")
-    validate_skill("plugins/ally/skills/tabletop/SKILL.md")
-    validate_skill("plugins/ally/skills/quest-scenario/SKILL.md")
+    validate_skill("plugins/ally/skills/ally/SKILL.md")
 
     print("Plugin validation passed.")
     return 0

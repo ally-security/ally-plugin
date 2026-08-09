@@ -1,5 +1,4 @@
 # Scripts
 
-Place shared hook and utility scripts here.
-
-Skill-specific scripts live beside each skill under `skills/<skill-name>/scripts/`.
+The plugin currently ships no runtime scripts. Repository validation lives in
+`scripts/validate_plugin.py` at the repository root.

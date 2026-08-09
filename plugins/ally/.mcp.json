@@ -2,7 +2,7 @@
   "mcpServers": {
     "mcp-ally": {
       "type": "http",
-      "url": "https://api.staging.ally.security/mcp"
+      "url": "https://api.app.ally.security/mcp"
     }
   }
 }

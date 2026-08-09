@@ -1,7 +1,7 @@
 {
   "name": "ally",
   "version": "0.2.0",
-  "description": "Ally Security tabletop exercise workflows, quest scenario design, and MCP-backed incident response tools.",
+  "description": "Connect Codex to Ally Security organizations, tabletops, quests, templates, and knowledge through MCP.",
   "author": {
     "name": "Ally Security",
     "email": "support@ally.security",
@@ -30,8 +30,8 @@
   "mcpServers": "./.codex-mcp.json",
   "interface": {
     "displayName": "Ally",
-    "shortDescription": "Plan, inspect, and improve Ally tabletop exercises.",
-    "longDescription": "Connect Codex to Ally Security tools and bundled skills for tabletop exercise reporting, quest scenario design, facilitator preparation, and incident-response workflow analysis.",
+    "shortDescription": "Use Ally Security through MCP.",
+    "longDescription": "Connect Codex to Ally Security organizations, members, tabletops, quests, scenario templates, audit logs, and knowledge-base tools through MCP.",
     "developerName": "Ally Security",
     "category": "Productivity",
     "capabilities": ["Interactive", "Read", "Write"],
@@ -39,9 +39,9 @@
     "privacyPolicyURL": "https://app.termly.io/policy-viewer/policy.html?policyUUID=af48f919-2bcd-4534-aa88-a7f61a065fe3",
     "termsOfServiceURL": "https://app.termly.io/policy-viewer/policy.html?policyUUID=16d27ab5-bb25-4127-b5bf-108da1a0522e",
     "defaultPrompt": [
-      "List my Ally organizations and available tabletops",
-      "Summarize a tabletop and extract follow-up actions",
-      "Review an Ally quest scenario for realism"
+      "List my Ally organizations",
+      "Show my available Ally tabletops",
+      "List my Ally quests and scenario templates"
     ],
     "brandColor": "#CF2063",
     "composerIcon": "./assets/favicon.png",

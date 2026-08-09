@@ -1,8 +1,8 @@
 {
   "name": "ally-marketplace",
   "interface": {
-    "displayName": "Ally Plugins",
-    "description": "Ally Security plugins for tabletop exercises, quest scenarios, and incident-response workflows.",
+    "displayName": "Ally Security",
+    "description": "Connect Codex to Ally Security through MCP.",
     "websiteURL": "https://ally.security",
     "publisher": "Ally Security"
   },
@@ -18,8 +18,8 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Productivity",
-      "description": "Plan, inspect, and improve Ally tabletop exercises and quest scenarios.",
-      "version": "0.1.0",
+      "description": "Use Ally Security organizations, tabletops, quests, templates, and knowledge through MCP.",
+      "version": "0.2.0",
       "tags": ["ally", "security", "mcp", "tabletop", "incident-response", "quest"]
     }
   ]

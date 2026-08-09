@@ -1,10 +1,4 @@
 # Hooks
 
-Place plugin lifecycle hooks here.
-
-Examples:
-
-- install or update checks
-- manifest generation
-- release validation
-- provider-specific packaging helpers
+The plugin currently defines no lifecycle hooks. Keep `hooks.json` as an empty
+hook configuration until a concrete lifecycle requirement is added.

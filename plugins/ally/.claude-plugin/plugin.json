@@ -1,7 +1,7 @@
 {
   "name": "ally",
   "version": "0.2.0",
-  "description": "Ally Security tabletop exercise workflows, quest scenario design, and MCP-backed incident response tools.",
+  "description": "Connect Claude Code to Ally Security organizations, tabletops, quests, templates, and knowledge through MCP.",
   "author": {
     "name": "Ally Security",
     "email": "support@ally.security",
