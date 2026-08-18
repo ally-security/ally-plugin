@@ -9,7 +9,7 @@ https://api.app.ally.security/mcp
 ```
 
 If separate installable environments are needed, use thin Git branches that
-change only the two MCP configuration files.
+change only the shared MCP configuration file.
 
 | Branch | MCP URL | Purpose |
 | --- | --- | --- |
@@ -21,13 +21,12 @@ change only the two MCP configuration files.
 
 Keep all plugin manifests, skills, hooks, assets, and documentation on `main`.
 Maintain `staging` and `local` as mechanical overlays containing only the URL
-changes in:
+change in:
 
-- `plugins/ally/.codex-mcp.json`
 - `plugins/ally/.mcp.json`
 
-Rebase or regenerate both overlay branches whenever `main` changes, then run
-`python3 scripts/validate_plugin.py` on every branch.
+Rebase or regenerate both overlay branches whenever `main` changes, then use
+both Codex and Claude Code to install the plugin from every branch.
 
 ## Proposed install commands
 

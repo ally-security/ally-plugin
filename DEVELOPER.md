@@ -15,7 +15,6 @@ For normal installation, use [README.md](README.md).
 | `plugins/ally/skills/ally/references/tools.md` | Catalog of tools advertised by Ally. |
 | `.agents/plugins/marketplace.json` | Codex marketplace manifest. |
 | `.claude-plugin/marketplace.json` | Claude Code marketplace manifest. |
-| `scripts/validate_plugin.py` | Repository validator used by CI. |
 
 ## MCP server
 
@@ -66,29 +65,26 @@ Restart Claude Code, complete Ally sign-in, and use the same test prompt.
 
 ## Validate
 
-Run the repository validator:
+Use the actual client CLIs. For Codex, add this checkout and install the plugin:
 
 ```bash
-python3 scripts/validate_plugin.py
+codex plugin marketplace add ./
+codex plugin add ally@ally-marketplace
+codex plugin list --json
 ```
 
-If Claude Code is installed, validate its marketplace too:
+For Claude Code, validate both manifests and install the plugin:
 
 ```bash
 claude plugin validate ./plugins/ally
 claude plugin validate .
+claude plugin marketplace add ./
+claude plugin install ally@ally-marketplace
+claude plugin list --json
 ```
 
-To run both checks:
-
-```bash
-python3 scripts/validate_plugin.py
-claude plugin validate ./plugins/ally
-claude plugin validate .
-```
-
-The validator checks manifests, MCP configuration, required assets, the
-single `ally` skill, and marketplace wiring.
+CI runs these flows with isolated client configuration directories. An install
+failure is the validation failure; there is no separate repository validator.
 
 ## Inspect MCP tools
 
@@ -113,11 +109,13 @@ server, use `http://localhost:8000/mcp/`.
 
 | Command | Purpose |
 | --- | --- |
-| `python3 scripts/validate_plugin.py` | Run the repository validator. |
 | `claude plugin validate ./plugins/ally` | Validate the Claude plugin manifest. |
 | `claude plugin validate .` | Validate the Claude marketplace. |
 | `codex plugin marketplace add ./` | Add the local Codex marketplace. |
 | `codex plugin add ally@ally-marketplace` | Install Ally from that marketplace. |
+| `codex plugin list --json` | Confirm the installed Codex plugin. |
+| `claude plugin marketplace add ./` | Add the local Claude marketplace. |
+| `claude plugin install ally@ally-marketplace` | Install Ally from that marketplace. |
 | `claude --plugin-dir ./plugins/ally` | Launch Claude Code with the local plugin. |
 | `npx --yes @modelcontextprotocol/inspector` | Launch MCP Inspector. |
 
@@ -126,7 +124,7 @@ server, use `http://localhost:8000/mcp/`.
 1. Bump and align both plugin manifests and marketplace entry versions.
 2. Keep the shared MCP configuration on the intended URL.
 3. Verify the live MCP tool list and update the skill catalog if necessary.
-4. Run both validators.
+4. Run both real-client validation and install flows.
 5. Confirm both install flows from [README.md](README.md).
 
 The future environment-branch proposal is tracked in
