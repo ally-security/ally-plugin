@@ -1,6 +1,6 @@
 ---
 name: ally
-description: Use Ally Security through its connected MCP server. Trigger for Ally account or authentication questions; discovering organizations and members; working with tabletops, quests, scenario templates, audit logs, and knowledge-base data; creating tabletops from video; creating or editing quests; explaining Ally MCP capabilities; or troubleshooting Ally tool calls.
+description: Use Ally Security through its connected MCP server. Trigger for Ally account or authentication questions; discovering organizations and members; working with tabletops, quests, quest runs, scenario templates, audit logs, and knowledge-base data; creating tabletops from video; creating or editing quests; explaining Ally MCP capabilities; or troubleshooting Ally tool calls.
 ---
 
 # Ally

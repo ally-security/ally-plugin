@@ -1,6 +1,6 @@
 {
   "name": "ally",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Connect Claude Code to Ally Security organizations, tabletops, quests, templates, and knowledge through MCP.",
   "author": {
     "name": "Ally Security",
@@ -8,10 +8,7 @@
     "url": "https://ally.security"
   },
   "homepage": "https://ally.security",
-  "documentation": "https://docs.ally.security",
-  "support": "https://ally.security/contact",
   "repository": "https://github.com/ally-security/ally-plugin",
-  "bugs": "https://github.com/ally-security/ally-plugin/issues",
   "license": "MIT",
   "keywords": [
     "ally",
