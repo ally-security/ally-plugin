@@ -1,43 +1,45 @@
-# Ally MCP Plugin
+# Ally Plugin
 
-Connect Codex or Claude Code to Ally Security.
+Use Ally Security from Codex or Claude Code through MCP. The plugin provides
+access to Ally organizations, tabletops, quests, scenario templates, audit
+logs, and knowledge-base tools.
 
-You need an [Ally Security](https://ally.security) account to sign in.
+You need an [Ally Security](https://ally.security) account and either Codex or
+Claude Code.
 
-## Install in Codex
+## Codex
 
-Run these commands:
+Install the marketplace and plugin:
 
 ```bash
 codex plugin marketplace add ally-security/ally-plugin
 codex plugin add ally@ally-marketplace
 ```
 
-Restart Codex. When prompted, sign in to Ally.
-
-Test the connection with:
+Restart Codex, sign in to Ally when prompted, then try:
 
 > Use Ally to list my organizations.
 
-## Install in Claude Code
+## Claude Code
 
-Run these commands:
+Install the marketplace and plugin:
 
 ```bash
 claude plugin marketplace add ally-security/ally-plugin
 claude plugin install ally@ally-marketplace
 ```
 
-Restart Claude Code. When prompted, sign in to Ally.
-
-Test the connection with:
+Restart Claude Code, sign in to Ally when prompted, then try:
 
 > Use Ally to list my organizations.
 
-## MCP endpoint
+## Connection
 
-The plugin connects to:
+Both clients connect to the hosted Ally MCP endpoint:
 
 ```text
 https://api.app.ally.security/mcp
 ```
+
+Authentication uses Ally's OAuth sign-in flow. No API key needs to be added to
+this repository.
