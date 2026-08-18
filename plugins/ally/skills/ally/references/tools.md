@@ -1,7 +1,7 @@
 # Ally MCP Tools
 
 The hosted MCP implementation at `https://api.app.ally.security/mcp`
-advertised the following 14 tools on 2026-08-08. Tool names are exact. Purpose
+advertised the following 15 tools on 2026-08-18. Tool names are exact. Purpose
 summaries are routing guidance; use the authenticated live tool description and
 input schema for parameters and behavior.
 
@@ -23,6 +23,8 @@ input schema for parameters and behavior.
 - `listQuests` — discover quests.
 - `getQuest` — retrieve one quest's complete available details and current
   state.
+- `listQuestRuns` — list quest runs in the scope and shape defined by the live
+  schema.
 - `createQuest` — create a quest using the fields required by the live schema.
 - `editQuest` — update a quest. Call `getQuest` first and use the live schema
   to determine patch versus replacement semantics and editable states.

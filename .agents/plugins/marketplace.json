@@ -19,7 +19,7 @@
       },
       "category": "Productivity",
       "description": "Use Ally Security organizations, tabletops, quests, templates, and knowledge through MCP.",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "tags": ["ally", "security", "mcp", "tabletop", "incident-response", "quest"]
     }
   ]

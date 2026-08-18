@@ -67,4 +67,6 @@ jobs:
         run: claude --version
 
       - name: Validate Claude marketplace
-        run: claude plugin validate .
+        run: |
+          claude plugin validate ./plugins/ally
+          claude plugin validate .

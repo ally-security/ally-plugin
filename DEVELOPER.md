@@ -10,8 +10,7 @@ For normal installation, use [README.md](README.md).
 | --- | --- |
 | `plugins/ally/.codex-plugin/plugin.json` | Codex plugin manifest. |
 | `plugins/ally/.claude-plugin/plugin.json` | Claude Code plugin manifest. |
-| `plugins/ally/.codex-mcp.json` | Codex MCP connection. |
-| `plugins/ally/.mcp.json` | Claude Code MCP connection. |
+| `plugins/ally/.mcp.json` | Shared Codex and Claude Code MCP connection. |
 | `plugins/ally/skills/ally/SKILL.md` | Instructions for using Ally through MCP. |
 | `plugins/ally/skills/ally/references/tools.md` | Catalog of tools advertised by Ally. |
 | `.agents/plugins/marketplace.json` | Codex marketplace manifest. |
@@ -26,10 +25,8 @@ Both hosts connect to:
 https://api.app.ally.security/mcp
 ```
 
-Keep these files on the same URL:
-
-- `plugins/ally/.codex-mcp.json`
-- `plugins/ally/.mcp.json`
+Both plugin manifests point to `plugins/ally/.mcp.json`, so the MCP URL has one
+source of truth.
 
 The public endpoint advertises the tool names. Authenticated MCP `tools/list`
 is the source of truth for descriptions and input schemas. When tools change,
@@ -78,6 +75,7 @@ python3 scripts/validate_plugin.py
 If Claude Code is installed, validate its marketplace too:
 
 ```bash
+claude plugin validate ./plugins/ally
 claude plugin validate .
 ```
 
@@ -85,6 +83,7 @@ To run both checks:
 
 ```bash
 python3 scripts/validate_plugin.py
+claude plugin validate ./plugins/ally
 claude plugin validate .
 ```
 
@@ -115,6 +114,7 @@ server, use `http://localhost:8000/mcp/`.
 | Command | Purpose |
 | --- | --- |
 | `python3 scripts/validate_plugin.py` | Run the repository validator. |
+| `claude plugin validate ./plugins/ally` | Validate the Claude plugin manifest. |
 | `claude plugin validate .` | Validate the Claude marketplace. |
 | `codex plugin marketplace add ./` | Add the local Codex marketplace. |
 | `codex plugin add ally@ally-marketplace` | Install Ally from that marketplace. |
@@ -123,8 +123,8 @@ server, use `http://localhost:8000/mcp/`.
 
 ## Release checklist
 
-1. Keep both plugin manifests and marketplace entry versions aligned.
-2. Keep both MCP configuration files on the intended URL.
+1. Bump and align both plugin manifests and marketplace entry versions.
+2. Keep the shared MCP configuration on the intended URL.
 3. Verify the live MCP tool list and update the skill catalog if necessary.
 4. Run both validators.
 5. Confirm both install flows from [README.md](README.md).

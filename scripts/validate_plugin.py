@@ -18,7 +18,6 @@ JSON_FILES = [
     ".agents/plugins/marketplace.json",
     "plugins/ally/.codex-plugin/plugin.json",
     "plugins/ally/.claude-plugin/plugin.json",
-    "plugins/ally/.codex-mcp.json",
     "plugins/ally/.mcp.json",
     "plugins/ally/hooks/hooks.json",
 ]
@@ -87,6 +86,25 @@ def validate_codex_manifest(plugin_path: Path) -> dict[str, Any]:
     manifest_path = plugin_path / ".codex-plugin" / "plugin.json"
     manifest = require_object(json.loads(manifest_path.read_text(encoding="utf-8")), str(manifest_path.relative_to(ROOT)))
 
+    allowed_keys = {
+        "id",
+        "name",
+        "version",
+        "description",
+        "skills",
+        "apps",
+        "mcpServers",
+        "interface",
+        "author",
+        "homepage",
+        "repository",
+        "license",
+        "keywords",
+    }
+    unsupported_keys = sorted(set(manifest) - allowed_keys)
+    if unsupported_keys:
+        fail(f"Codex plugin manifest contains unsupported keys: {', '.join(unsupported_keys)}")
+
     name = require_string(manifest.get("name"), "plugin name")
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", name):
         fail("plugin name must be kebab-case, lowercase, and no more than 64 characters")
@@ -102,11 +120,13 @@ def validate_codex_manifest(plugin_path: Path) -> dict[str, Any]:
     require_string(author.get("name"), "plugin author.name")
     require_string(author.get("url"), "plugin author.url")
 
-    for key in ("skills", "hooks", "mcpServers"):
+    for key in ("skills", "mcpServers"):
         path = require_relative_path(manifest.get(key), f"plugin {key}")
         path = plugin_path / path.relative_to(ROOT)
         if not path.exists():
             fail(f"plugin {key} target does not exist: {manifest[key]}")
+    if manifest.get("mcpServers") != "./.mcp.json":
+        fail("plugin mcpServers must point to ./.mcp.json")
 
     interface = require_object(manifest.get("interface"), "plugin interface")
     for key in ("displayName", "shortDescription", "longDescription", "developerName", "category"):
@@ -131,6 +151,27 @@ def validate_claude_manifest(plugin_path: Path, plugin_name: str, plugin_version
     manifest_path = plugin_path / ".claude-plugin" / "plugin.json"
     manifest = require_object(json.loads(manifest_path.read_text(encoding="utf-8")), str(manifest_path.relative_to(ROOT)))
 
+    allowed_keys = {
+        "name",
+        "version",
+        "description",
+        "author",
+        "homepage",
+        "repository",
+        "license",
+        "keywords",
+        "commands",
+        "agents",
+        "skills",
+        "hooks",
+        "mcpServers",
+        "lspServers",
+        "outputStyles",
+    }
+    unsupported_keys = sorted(set(manifest) - allowed_keys)
+    if unsupported_keys:
+        fail(f"Claude plugin manifest contains unsupported keys: {', '.join(unsupported_keys)}")
+
     if manifest.get("name") != plugin_name:
         fail("Claude plugin manifest name must match the Codex plugin name")
 
@@ -150,6 +191,8 @@ def validate_claude_manifest(plugin_path: Path, plugin_name: str, plugin_version
         path = plugin_path / require_relative_path(manifest.get(key), f"Claude plugin {key}").relative_to(ROOT)
         if not path.exists():
             fail(f"Claude plugin {key} target does not exist: {manifest[key]}")
+    if manifest.get("mcpServers") != "./.mcp.json":
+        fail("Claude plugin mcpServers must point to ./.mcp.json")
 
 
 def validate_mcp_config(relative_path: str) -> None:
@@ -308,7 +351,6 @@ def main() -> int:
     validate_claude_manifest(plugin_path, manifest["name"], manifest["version"])
     validate_claude_marketplace(manifest["name"], plugin_path)
     validate_mcp_config("plugins/ally/.mcp.json")
-    validate_mcp_config("plugins/ally/.codex-mcp.json")
     validate_skill("plugins/ally/skills/ally/SKILL.md")
 
     print("Plugin validation passed.")
