@@ -34,6 +34,10 @@ Treat the catalog as routing guidance, not a substitute for `tools/list`. Read
 the live tool description and input schema for required parameters,
 pagination, write semantics, and state restrictions before calling a tool.
 
+For credible scenario authoring, use `$ally-quest-scenario`. For reusable
+scenario-template drafts and ETag-safe management operations, use
+`$ally-scenario-template`.
+
 ## Guardrails
 
 - Ground answers in returned Ally data. Do not invent organizations,
