@@ -24,6 +24,11 @@ Use these exact live tools when available to the authenticated user:
 These tools require scenario-management access. Respect a missing tool or
 permission error; do not attempt another admin endpoint as a workaround.
 
+Use `editScenarioTemplateDraft` only through the native Ally MCP tool. Never
+embed complete YAML in a shell command or send it through a manual terminal or
+JSON-RPC fallback. If the native tool is unavailable, stop and repair the
+plugin reload or authentication state before continuing.
+
 ## Workflow
 
 1. Determine whether the request is create, edit, review, or validation only.
