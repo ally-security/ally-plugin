@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ally Quest Scenario"
+  short_description: "Build and validate credible Ally quest scenarios"
+  default_prompt: "Use $ally-quest-scenario to design and validate an Ally quest scenario from my inputs."

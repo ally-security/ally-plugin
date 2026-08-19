@@ -26,6 +26,11 @@ jobs:
       - name: Show Codex CLI version
         run: codex --version
 
+      - name: Test scenario authoring validators
+        run: |
+          node plugins/ally/skills/ally-quest-scenario/scripts/validate-quest-scenario.mjs --self-test
+          node plugins/ally/skills/ally-scenario-template/scripts/validate-scenario-template.mjs --self-test
+
       - name: Install plugin from local marketplace
         run: |
           ALLY_CODEX_TEST_DIR="${RUNNER_TEMP}/codex-plugin-test-home"

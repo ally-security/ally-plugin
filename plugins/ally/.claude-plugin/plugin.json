@@ -1,6 +1,6 @@
 {
   "name": "ally",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Connect Claude Code to Ally Security organizations, tabletops, quests, templates, and knowledge through MCP.",
   "author": {
     "name": "Ally Security",

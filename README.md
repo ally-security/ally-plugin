@@ -2,7 +2,8 @@
 
 Use Ally Security from Codex or Claude Code through MCP. The plugin provides
 access to Ally organizations, tabletops, quests, scenario templates, audit
-logs, and knowledge-base tools.
+logs, and knowledge-base tools. It also includes dedicated skills and local
+validators for credible Quest scenarios and reusable scenario-template drafts.
 
 You need an [Ally Security](https://ally.security) account and either Codex or
 Claude Code.
@@ -43,3 +44,12 @@ https://api.app.ally.security/mcp
 
 Authentication uses Ally's OAuth sign-in flow. No API key needs to be added to
 this repository.
+
+## Scenario authoring
+
+- `$ally-quest-scenario` designs, reviews, and validates Quest scenario JSON.
+- `$ally-scenario-template` builds canonical schema-v2 documents and safely
+  creates or edits unpublished drafts through ETag-protected MCP tools.
+
+The validators run with Node.js and do not contact production. See each skill's
+`scripts/` directory for command usage.

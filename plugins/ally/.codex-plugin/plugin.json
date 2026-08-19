@@ -1,6 +1,6 @@
 {
   "name": "ally",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Connect Codex to Ally Security organizations, tabletops, quests, templates, and knowledge through MCP.",
   "author": {
     "name": "Ally Security",
@@ -27,7 +27,7 @@
   "interface": {
     "displayName": "Ally",
     "shortDescription": "Use Ally Security through MCP.",
-    "longDescription": "Connect Codex to Ally Security organizations, members, tabletops, quests, scenario templates, audit logs, and knowledge-base tools through MCP.",
+    "longDescription": "Connect Codex to Ally Security organizations, members, tabletops, quests, scenario templates, audit logs, and knowledge-base tools through MCP, with guided scenario authoring and local validation.",
     "developerName": "Ally Security",
     "category": "Productivity",
     "capabilities": ["Interactive", "Read", "Write"],
@@ -37,7 +37,9 @@
     "defaultPrompt": [
       "List my Ally organizations",
       "Show my available Ally tabletops",
-      "List my Ally quests and scenario templates"
+      "List my Ally quests and scenario templates",
+      "Build and validate a credible Ally Quest scenario",
+      "Create an unpublished Ally scenario-template draft"
     ],
     "brandColor": "#CF2063",
     "composerIcon": "./assets/favicon.png",
