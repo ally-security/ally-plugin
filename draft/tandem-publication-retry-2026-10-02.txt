@@ -1,1 +1,1 @@
-Real GitHub retry fixture: pulls.
+Real GitHub retry fixture: ref-update.
