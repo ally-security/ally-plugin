@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  codex-marketplace-smoke:
+    name: Codex marketplace smoke test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Codex CLI
+        run: npm install --global @openai/codex@latest
+
+      - name: Show Codex CLI version
+        run: codex --version
+
+      - name: Test scenario authoring validators
+        run: |
+          node plugins/ally/skills/ally-quest-scenario/scripts/validate-quest-scenario.mjs --self-test
+          node plugins/ally/skills/ally-scenario-template/scripts/validate-scenario-template.mjs --self-test
+
+      - name: Install plugin from local marketplace
+        run: |
+          ALLY_CODEX_TEST_DIR="${RUNNER_TEMP}/codex-plugin-test-home"
+          mkdir -p "$ALLY_CODEX_TEST_DIR"
+          env CODEX_HOME="$ALLY_CODEX_TEST_DIR" codex plugin marketplace add ./
+          env CODEX_HOME="$ALLY_CODEX_TEST_DIR" codex plugin list --marketplace ally-marketplace --available --json
+          env CODEX_HOME="$ALLY_CODEX_TEST_DIR" codex plugin add ally@ally-marketplace
+          env CODEX_HOME="$ALLY_CODEX_TEST_DIR" codex plugin list --json
+
+  claude-marketplace-smoke:
+    name: Claude marketplace smoke test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Claude Code CLI
+        run: npm install --global @anthropic-ai/claude-code@latest
+
+      - name: Show Claude Code CLI version
+        run: claude --version
+
+      - name: Validate and install plugin from local marketplace
+        run: |
+          claude plugin validate ./plugins/ally
+          claude plugin validate .
+          ALLY_CLAUDE_TEST_DIR="${RUNNER_TEMP}/claude-plugin-test-config"
+          mkdir -p "$ALLY_CLAUDE_TEST_DIR"
+          env CLAUDE_CONFIG_DIR="$ALLY_CLAUDE_TEST_DIR" claude plugin marketplace add ./
+          env CLAUDE_CONFIG_DIR="$ALLY_CLAUDE_TEST_DIR" claude plugin install ally@ally-marketplace
+          env CLAUDE_CONFIG_DIR="$ALLY_CLAUDE_TEST_DIR" claude plugin list --json

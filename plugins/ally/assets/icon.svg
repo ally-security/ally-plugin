@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Ally icon</title>
+  <desc id="desc">Shield mark for the Ally plugin.</desc>
+  <rect width="64" height="64" rx="14" fill="#101828"/>
+  <path d="M32 10 50 17v13c0 11.8-7.5 19.9-18 24-10.5-4.1-18-12.2-18-24V17l18-7Z" fill="#2DD4BF"/>
+  <path d="M23 32.5 29.2 39 42 25" fill="none" stroke="#101828" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

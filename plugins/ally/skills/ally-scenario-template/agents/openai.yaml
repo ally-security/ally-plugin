@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ally Scenario Template"
+  short_description: "Author and validate Ally scenario-template drafts"
+  default_prompt: "Use $ally-scenario-template to author and validate an Ally scenario-template draft."

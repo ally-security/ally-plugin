@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ally"
+  short_description: "Use Ally Security through MCP"
+  default_prompt: "Use $ally to list my Ally organizations and available tabletops."
